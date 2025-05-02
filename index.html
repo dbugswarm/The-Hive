@@ -39,7 +39,17 @@
       font-size: 16px;
       width: 300px;
     }
-    /* Enhanced Scanlines and Full Vignette */
+    .glitch {
+      animation: glitch 0.3s steps(2, end) 3;
+    }
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-3px, 2px); }
+      40% { transform: translate(3px, -1px); }
+      60% { transform: translate(-2px, 3px); }
+      80% { transform: translate(1px, -2px); }
+      100% { transform: translate(0); }
+    }
     body::before {
       content: "";
       position: absolute;
@@ -57,23 +67,22 @@
       );
       animation: flicker 1.5s infinite;
       pointer-events: none;
-    }@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.85; }
-}
-
-body::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.75) 100%);
-  pointer-events: none;
-}
-
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      background: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.75) 100%);
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -153,10 +162,12 @@ const handleInput = async (value) => {
       `> \n> Bring this password to D-Bug to complete your mission.`
     ]);
   } else {
+    terminal.classList.add("glitch");
     terminal.innerHTML += `\n> ERROR: INVALID STRING.`;
     terminal.innerHTML += `\n> INTRUSION COUNTERMEASURE ACTIVATED.`;
     terminal.innerHTML += `\n> RESETTING TERMINAL...`;
     setTimeout(() => {
+      terminal.classList.remove("glitch");
       location.reload();
     }, 3000);
   }
