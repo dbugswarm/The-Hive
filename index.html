@@ -38,6 +38,11 @@
       font-family: 'MSDOS', monospace;
       font-size: 16px;
       width: 300px;
+      outline: none;
+      caret-color: #FFFF00;
+    }
+    input::placeholder {
+      color: #FFFF00;
     }
     .glitch {
       animation: glitch 0.3s steps(2, end) 3;
@@ -120,13 +125,22 @@
   <audio id="beep-sound" preload="auto">
     <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
   </audio>
+  <audio id="focus-sound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRlAAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRgAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
+  </audio>
   <div id="terminal"></div>
   <script>
     const terminal = document.getElementById("terminal");
     const beep = document.getElementById("beep-sound");
+    const focusSound = document.getElementById("focus-sound");
     let state = "boot";const playBeep = () => {
   const sound = beep.cloneNode();
   sound.play().catch(() => {});
+};
+
+const playFocusSound = () => {
+  const fx = focusSound.cloneNode();
+  fx.play().catch(() => {});
 };
 
 const printLine = (text = "", delay = 50) => {
@@ -167,6 +181,8 @@ const bootSequence = async () => {
 
   const input = document.createElement("input");
   input.setAttribute("autocomplete", "off");
+  input.setAttribute("placeholder", "█");
+  input.addEventListener("focus", playFocusSound);
   input.focus();
   terminal.appendChild(input);
 
@@ -185,13 +201,41 @@ const handleInput = async (value) => {
   if (value === correctAnswer) {
     document.body.classList.add("flash-yellow");
     await printLines([
-      "     *     ",
-      "   *-|-*   ",
-      "   ..*..   ",
-      " *\"*****\"* ",
-      " \" \"\"\"\"\"\" \" ",
-      " \\*********/ ",
-      "  (((((0)))))  \n"
+      "           ,  .'''''.  ...    ''''',  .'          ",
+      "            ','     ,.MMMM;.;'      '.            ",
+      "             ;;    ;MMMMMMMMM;     ;;'            ",
+      "            :'M:  ;MMMMMMMMMMM;.  :M':            ",
+      "            : M:  MMMMMMMMMMMMM:  :M  .           ",
+      "           .' M:  MMMMMMMMMMMMM:  :M. ;           ",
+      "           ; :M'  :MMMMMMMMMMMM'  'M: :           ",
+      "           : :M: .;\"MMMMMMMMM\":;. ,M: :           ",
+      "           :  ::,MMM;.M\":::M.;MMM ::' :           ",
+      "         ,.;    ;MMMMMM;:MMMMMMMM:    :,.         ",
+      "         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM         ",
+      "         M:''':MMMMMMMMM;MMMMMMMM: \"': M         ",
+      "         M.:   ;MMMMMMMMMMMMMMMMMM;   : M         ",
+      "         :::   MMMMMMMMMMM;MMMMMMMM   ::M         ",
+      "        ,'';   MMMMMMMMMMMM:MMMMMMM   :'\".        ",
+      "      ,'   :   MMMMMMMMMMMM:MMMMMMM   :   '.      ",
+      "     '     :  'MMMMMMMMMMMMM:MMMMMM   ;     '     ",
+      "     ,.....;.. MMMMMMMMMMMMM:MMMMMM ..:....;.     ",
+      "     :MMMMMMMM MMMMMMMMMMMMM:MMMMMM MMMMMMMM:     ",
+      "     :MM\"\":\"\" MMMMMMMMMMMMM:MMMMMM \"\": \"'MM:     ",
+      "      MM:   :  MMMMMMMMMMMMM:MMMMMM  ,'  :MM      ",
+      "      'MM   :  :MMMMMMMMMMMM:MMMMM:  :   ;M:      ",
+      "       :M;  :  'MMMMMMMMMMMMMMMMMM'  :  ;MM       ",
+      "       :MM. :   :MMMMMMMMMM;MMMMM:   :  MM:       ",
+      "        :M: :    MMMMMMMMM'MMMMMM'   : :MM'       ",
+      "        'MM :    \"MMMMMMM:;MMMMM\"   ,' ;M\"        ",
+      "         'M  :    \"\"\"\":;;;\"\"\"\"    :  M:         ",
+      "         ;'  :     \"MMMMMMMM;."     :  \"\".        ",
+      "       ,;    :      :MMMMMMM:;.     :    '.       ",
+      "      :'     :    ,MM''\"\"\"\"':M:    :     ';      ",
+      "     ;'      :    ;M'         MM.   :       ;.    ",
+      "   ,'        :    \"            \"'   :        '.   ",
+      "   '        :'                       '        ''  ",
+      " .          :                        '          ' ",
+      "'          ;                          ;          '"
     ]);
     await new Promise((r) => setTimeout(r, 500));
     await printLines([
