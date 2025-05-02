@@ -50,6 +50,13 @@
       80% { transform: translate(1px, -2px); }
       100% { transform: translate(0); }
     }
+    .flash-yellow {
+      animation: flashYellow 0.3s 2;
+    }
+    @keyframes flashYellow {
+      0%, 100% { background-color: black; }
+      50% { background-color: #ffff00; }
+    }
     .fade-black {
       position: absolute;
       top: 0;
@@ -66,6 +73,13 @@
       to {
         opacity: 1;
       }
+    }
+    .flash-red {
+      animation: flashRed 0.3s 2;
+    }
+    @keyframes flashRed {
+      0%, 100% { background-color: black; }
+      50% { background-color: #ff0000; }
     }
     body::before {
       content: "";
@@ -169,6 +183,15 @@ const handleInput = async (value) => {
   terminal.innerHTML += `\n> ${value}`;
 
   if (value === correctAnswer) {
+    document.body.classList.add("flash-yellow");
+    await printLines([
+      "\n   _/_/_/    _/_/_/    _/_/_/    _/_/_/_/",
+      "  _/    _/  _/    _/  _/    _/  _/       ",
+      " _/_/_/    _/    _/  _/_/_/    _/_/_/    ",
+      "_/    _/  _/    _/  _/    _/  _/         ",
+      "_/_/_/    _/_/_/    _/_/_/    _/         \n"
+    ]);
+    await new Promise((r) => setTimeout(r, 500));
     await printLines([
       "> ACCESS PHRASE ACCEPTED.",
       "> UNLOCKING NODE...",
@@ -178,11 +201,16 @@ const handleInput = async (value) => {
       `> I'm D-Bug with the R@t BOIZ."`,
       `> \n> Bring this password to D-Bug to complete your mission.`
     ]);
+    document.body.classList.remove("flash-yellow");
   } else {
     terminal.classList.add("glitch");
-    terminal.innerHTML += `\n> ERROR: INVALID STRING.`;
-    terminal.innerHTML += `\n> INTRUSION COUNTERMEASURE ACTIVATED.`;
-    terminal.innerHTML += `\n> RESETTING TERMINAL...`;
+    document.body.classList.add("flash-red");
+    await printLines([
+      `> ${value}`,
+      "> ERROR: INVALID STRING.",
+      "> INTRUSION COUNTERMEASURE ACTIVATED.",
+      "> RESETTING TERMINAL..."
+    ]);
     await new Promise((r) => setTimeout(r, 500));
     await printLines([
       "\n\n\n\n",
@@ -190,12 +218,11 @@ const handleInput = async (value) => {
       "> PURGING MEMORY CACHE...",
       "> RESTORING DEFAULT PROMPT...\n"
     ]);
-
     const fade = document.createElement("div");
     fade.className = "fade-black";
     document.body.appendChild(fade);
-
     terminal.classList.remove("glitch");
+    document.body.classList.remove("flash-red");
     await new Promise((r) => setTimeout(r, 2000));
     location.reload();
   }
