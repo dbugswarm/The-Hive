@@ -10,7 +10,7 @@
     }
     body {
       background-color: black;
-      color: #FFFF00; /* Yellow text */
+      color: #FFFF00;
       font-family: 'MSDOS', monospace;
       font-size: 16px;
       padding: 20px;
@@ -39,7 +39,7 @@
       font-size: 16px;
       width: 300px;
     }
-    /* Adjusted CRT Scanlines + Glow + Flicker */
+    /* Enhanced Scanlines and Full Vignette */
     body::before {
       content: "";
       position: absolute;
@@ -69,8 +69,8 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+  z-index: 3;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.75) 100%);
   pointer-events: none;
 }
 
@@ -137,19 +137,21 @@ const bootSequence = async () => {
   });
 };
 
-const handleInput = (value) => {
+const handleInput = async (value) => {
   const correctAnswer = "BUGBRAIN";
   const passcode = "SW4RM-B1T3-V4";
   terminal.innerHTML += `\n> ${value}`;
 
   if (value === correctAnswer) {
-    terminal.innerHTML += `\n> ACCESS PHRASE ACCEPTED.`;
-    terminal.innerHTML += `\n> UNLOCKING NODE...`;
-    terminal.innerHTML += `\n> PASSCODE: ${passcode}\n`;
-    terminal.innerHTML += `\n> "I'm impressed. We could use a hacker like you in our ranks.`;
-    terminal.innerHTML += `\n> Seek me out for a reward.`;
-    terminal.innerHTML += `\n> I'm D-Bug with the R@t BOIZ."`;
-    terminal.innerHTML += `\n> \n> Bring this password to D-Bug to complete your mission.`;
+    await printLines([
+      "> ACCESS PHRASE ACCEPTED.",
+      "> UNLOCKING NODE...",
+      `> PASSCODE: ${passcode}\n`,
+      `> "I'm impressed. We could use a hacker like you in our ranks.`,
+      `> Seek me out for a reward.`,
+      `> I'm D-Bug with the R@t BOIZ."`,
+      `> \n> Bring this password to D-Bug to complete your mission.`
+    ]);
   } else {
     terminal.innerHTML += `\n> ERROR: INVALID STRING.`;
     terminal.innerHTML += `\n> INTRUSION COUNTERMEASURE ACTIVATED.`;
