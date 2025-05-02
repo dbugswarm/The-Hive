@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swarm Node Terminal</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00FF00;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      padding: 20px;
+      margin: 0;
+    }
+    #terminal {
+      white-space: pre-wrap;
+      overflow-y: auto;
+      height: 100vh;
+    }
+    .blinking {
+      animation: blink 1s step-start 0s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    input {
+      background: black;
+      color: #00FF00;
+      border: none;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal"></div>
+  <script>
+    const terminal = document.getElementById("terminal");
+    let state = "boot";
+
+    const printLine = (text = "", delay = 100) => {
+      return new Promise((resolve) => {
+        const line = document.createElement("div");
+        terminal.appendChild(line);
+        let i = 0;
+        const interval = setInterval(() => {
+          line.textContent += text[i];
+          i++;
+          if (i >= text.length) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, delay);
+      });
+    };
+
+    const printLines = async (lines) => {
+      for (const line of lines) {
+        await printLine(line);
+        await new Promise((r) => setTimeout(r, 400));
+      }
+    };
+
+    const bootSequence = async () => {
+      await printLines([
+        "> INITIATING CONNECTION...",
+        "> ACCESSING LOCAL NODE: SWARM-RUNNER_12X",
+        "> RUNNING DECRYPT ROUTINE...",
+        "> ICE TRIPWIRE ENGAGED.",
+        "> CIPHER MODULE ONLINE.\n",
+        "> CIPHER CHALLENGE: NEXWDUK",
+        "> (USE CLUE FROM NFC DEVICE TO DECRYPT)\n",
+        "> INPUT DECRYPTED STRING:"
+      ]);
+
+      const input = document.createElement("input");
+      input.setAttribute("autocomplete", "off");
+      input.focus();
+      terminal.appendChild(input);
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          handleInput(input.value.trim().toUpperCase());
+        }
+      });
+    };
+
+    const handleInput = (value) => {
+      const correctAnswer = "KBUTARH";
+      const passcode = "SW4RM-B1T3-V4";
+      terminal.innerHTML += `\n> ${value}`;
+
+      if (value === correctAnswer) {
+        terminal.innerHTML += `\n> ACCESS PHRASE ACCEPTED.`;
+        terminal.innerHTML += `\n> UNLOCKING NODE...`;
+        terminal.innerHTML += `\n> PASSCODE: ${passcode}\n`;
+        terminal.innerHTML += `\n> "I'm impressed. We could use a hacker like you in our ranks.`;
+        terminal.innerHTML += `\n> Seek me out for a reward.`;
+        terminal.innerHTML += `\n> I'm D-Bug with the R@t BOIZ."`;
+      } else {
+        terminal.innerHTML += `\n> ERROR: INVALID STRING.`;
+        terminal.innerHTML += `\n> INTRUSION COUNTERMEASURE ACTIVATED.`;
+        terminal.innerHTML += `\n> RESETTING TERMINAL...`;
+        setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    };
+
+    bootSequence();
+  </script>
+</body>
+</html>
+
+
+The terminal-style hacking game code is ready! It features:
+
+A full boot-up sequence
+
+Caesar cipher challenge (input: NEXWDUK, correct answer: KBUTARH)
+
+On success: reveals passcode SW4RM-B1T3-V4 and D-Bug's custom message
+
+On failure: shows ICE breach warning and resets after 3 seconds
+
+
+Next steps:
+
+1. Go to your GitHub repo (e.g., swarm-terminal)
+
+
+2. Click Add file > Create new file
+
+
+3. Name it index.html
+
+
+4. Paste the full code from the document above
+
+
+5. Commit the changes
+
+
+6. Enable GitHub Pages under Settings > Pages > Source: main branch
+
+
+
+Let me know if you want help with styling, sound FX, or packaging it into a ZIP.
+
