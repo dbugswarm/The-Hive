@@ -185,11 +185,13 @@ const handleInput = async (value) => {
   if (value === correctAnswer) {
     document.body.classList.add("flash-yellow");
     await printLines([
-      "\n   _/_/_/    _/_/_/    _/_/_/    _/_/_/_/",
-      "  _/    _/  _/    _/  _/    _/  _/       ",
-      " _/_/_/    _/    _/  _/_/_/    _/_/_/    ",
-      "_/    _/  _/    _/  _/    _/  _/         ",
-      "_/_/_/    _/_/_/    _/_/_/    _/         \n"
+      "     *     ",
+      "   *-|-*   ",
+      "   ..*..   ",
+      " *\"*****\"*",
+      "  \" \"\"\"\"\"\" \" ",
+      " \\*********/ ",
+      "  (((((0)))))  \n"
     ]);
     await new Promise((r) => setTimeout(r, 500));
     await printLines([
