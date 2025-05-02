@@ -16,11 +16,15 @@
       font-size: 16px;
       padding: 20px;
       margin: 0;
+      position: relative;
+      overflow: hidden;
     }
     #terminal {
       white-space: pre-wrap;
       overflow-y: auto;
       height: 100vh;
+      position: relative;
+      z-index: 1;
     }
     .blinking {
       animation: blink 1s step-start 0s infinite;
@@ -36,21 +40,42 @@
       font-size: 16px;
       width: 300px;
     }
+    /* CRT Scanlines */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 0, 0.05),
+        rgba(255, 255, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
+  <audio id="beep-sound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
   <div id="terminal"></div>
   <script>
     const terminal = document.getElementById("terminal");
+    const beep = document.getElementById("beep-sound");
     let state = "boot";
 
-    const printLine = (text = "", delay = 100) => {
+    const printLine = (text = "", delay = 50) => {
       return new Promise((resolve) => {
         const line = document.createElement("div");
         terminal.appendChild(line);
         let i = 0;
         const interval = setInterval(() => {
           line.textContent += text[i];
+          if (text[i] && text[i] !== " ") beep.cloneNode().play();
           i++;
           if (i >= text.length) {
             clearInterval(interval);
@@ -63,7 +88,7 @@
     const printLines = async (lines) => {
       for (const line of lines) {
         await printLine(line);
-        await new Promise((r) => setTimeout(r, 400));
+        await new Promise((r) => setTimeout(r, 300));
       }
     };
 
@@ -74,7 +99,7 @@
         "> RUNNING DECRYPT ROUTINE...",
         "> ICE TRIPWIRE ENGAGED.",
         "> CIPHER MODULE ONLINE.\n",
-        "> CIPHER CHALLENGE: NEXWDUK",
+        "> CIPHER CHALLENGE: EXJEUDLQ",
         "> (USE CLUE FROM NFC DEVICE TO DECRYPT)\n",
         "> INPUT DECRYPTED STRING:"
       ]);
@@ -92,7 +117,7 @@
     };
 
     const handleInput = (value) => {
-      const correctAnswer = "KBUTARH";
+      const correctAnswer = "BUGBRAIN";
       const passcode = "SW4RM-B1T3-V4";
       terminal.innerHTML += `\n> ${value}`;
 
@@ -120,18 +145,16 @@
 </html>
 
 
-Done! The updates include:
+Beep enabled! The terminal now emits a subtle old-school beep as each character appears—totally gives that 90s MS-DOS terminal vibe.
 
-Text color changed to yellow
+Test it live, and let me know if you'd like to:
 
-Font updated to a classic monospace (Courier New fallback) to emulate MS-DOS
+Add more intense alert sounds for ICE triggers
 
-Final message now says:
+Include glitchy flickers or screen shake effects
 
-> "Bring this password to D-Bug to complete your mission."
-
-
+Randomize terminal response lines for variety
 
 
-You can now copy and paste the updated code into your GitHub index.html file. Let me know if you want to add glitch effects, sounds, or a loading animation next!
+The swarm is buzzing, choom.
 
