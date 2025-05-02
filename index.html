@@ -50,6 +50,23 @@
       80% { transform: translate(1px, -2px); }
       100% { transform: translate(0); }
     }
+    .fade-black {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      z-index: 999;
+      opacity: 0;
+      animation: fadeOut 1s ease-in forwards;
+      animation-delay: 1s;
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 1;
+      }
+    }
     body::before {
       content: "";
       position: absolute;
@@ -173,8 +190,13 @@ const handleInput = async (value) => {
       "> PURGING MEMORY CACHE...",
       "> RESTORING DEFAULT PROMPT...\n"
     ]);
+
+    const fade = document.createElement("div");
+    fade.className = "fade-black";
+    document.body.appendChild(fade);
+
     terminal.classList.remove("glitch");
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 2000));
     location.reload();
   }
 };
