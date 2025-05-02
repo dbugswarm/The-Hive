@@ -4,14 +4,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swarm Node Terminal</title>
   <style>
-    @font-face {
-      font-family: 'MSDOS';
-      src: local('Courier New'), monospace;
-    }
     body {
       background-color: black;
       color: #FFFF00;
-      font-family: 'MSDOS', monospace;
+      font-family: 'Courier New', monospace;
       font-size: 16px;
       padding: 20px;
       margin: 0;
@@ -25,17 +21,11 @@
       position: relative;
       z-index: 1;
     }
-    .blinking {
-      animation: blink 1s step-start 0s infinite;
-    }
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
     input {
       background: black;
       color: #FFFF00;
       border: none;
-      font-family: 'MSDOS', monospace;
+      font-family: 'Courier New', monospace;
       font-size: 16px;
       width: 300px;
       outline: none;
@@ -61,23 +51,6 @@
     @keyframes flashYellow {
       0%, 100% { background-color: black; }
       50% { background-color: #ffff00; }
-    }
-    .fade-black {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: black;
-      z-index: 999;
-      opacity: 0;
-      animation: fadeOut 1s ease-in forwards;
-      animation-delay: 1s;
-    }
-    @keyframes fadeOut {
-      to {
-        opacity: 1;
-      }
     }
     .flash-red {
       animation: flashRed 0.3s 2;
@@ -108,17 +81,6 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.85; }
     }
-    body::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 3;
-      background: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.75) 100%);
-      pointer-events: none;
-    }
   </style>
 </head>
 <body>
@@ -132,8 +94,7 @@
   <script>
     const terminal = document.getElementById("terminal");
     const beep = document.getElementById("beep-sound");
-    const focusSound = document.getElementById("focus-sound");
-    let state = "boot";const playBeep = () => {
+    const focusSound = document.getElementById("focus-sound");const playBeep = () => {
   const sound = beep.cloneNode();
   sound.play().catch(() => {});
 };
@@ -160,24 +121,15 @@ const printLine = (text = "", delay = 50) => {
   });
 };
 
-const printLines = async (lines) => {
-  for (const line of lines) {
-    await printLine(line);
-    await new Promise((r) => setTimeout(r, 300));
-  }
-};
-
 const bootSequence = async () => {
-  await printLines([
-    "> INITIATING CONNECTION...",
-    "> ACCESSING LOCAL NODE: SWARM-RUNNER_12X",
-    "> RUNNING DECRYPT ROUTINE...",
-    "> ICE TRIPWIRE ENGAGED.",
-    "> CIPHER MODULE ONLINE.\n",
-    "> CIPHER CHALLENGE: EXJEUDLQ",
-    "> (USE CLUE FROM NFC DEVICE TO DECRYPT)\n",
-    "> INPUT DECRYPTED STRING:"
-  ]);
+  await printLine("> INITIATING CONNECTION...");
+  await printLine("> ACCESSING LOCAL NODE: SWARM-RUNNER_12X");
+  await printLine("> RUNNING DECRYPT ROUTINE...");
+  await printLine("> ICE TRIPWIRE ENGAGED.");
+  await printLine("> CIPHER MODULE ONLINE.\n");
+  await printLine("> CIPHER CHALLENGE: EXJEUDLQ");
+  await printLine("> (USE CLUE FROM NFC DEVICE TO DECRYPT)\n");
+  await printLine("> INPUT DECRYPTED STRING:");
 
   const input = document.createElement("input");
   input.setAttribute("autocomplete", "off");
@@ -194,83 +146,24 @@ const bootSequence = async () => {
 };
 
 const handleInput = async (value) => {
-  const correctAnswer = "BUGBRAIN";
-  const passcode = "SW4RM-B1T3-V4";
   terminal.innerHTML += `\n> ${value}`;
-
-  if (value === correctAnswer) {
+  if (value === "BUGBRAIN") {
     document.body.classList.add("flash-yellow");
-    await printLines([
-      "           ,  .'''''.  ...    ''''',  .'          ",
-      "            ','     ,.MMMM;.;'      '.            ",
-      "             ;;    ;MMMMMMMMM;     ;;'            ",
-      "            :'M:  ;MMMMMMMMMMM;.  :M':            ",
-      "            : M:  MMMMMMMMMMMMM:  :M  .           ",
-      "           .' M:  MMMMMMMMMMMMM:  :M. ;           ",
-      "           ; :M'  :MMMMMMMMMMMM'  'M: :           ",
-      "           : :M: .;\"MMMMMMMMM\":;. ,M: :           ",
-      "           :  ::,MMM;.M\":::M.;MMM ::' :           ",
-      "         ,.;    ;MMMMMM;:MMMMMMMM:    :,.         ",
-      "         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM         ",
-      "         M:''':MMMMMMMMM;MMMMMMMM: \"': M         ",
-      "         M.:   ;MMMMMMMMMMMMMMMMMM;   : M         ",
-      "         :::   MMMMMMMMMMM;MMMMMMMM   ::M         ",
-      "        ,'';   MMMMMMMMMMMM:MMMMMMM   :'\".        ",
-      "      ,'   :   MMMMMMMMMMMM:MMMMMMM   :   '.      ",
-      "     '     :  'MMMMMMMMMMMMM:MMMMMM   ;     '     ",
-      "     ,.....;.. MMMMMMMMMMMMM:MMMMMM ..:....;.     ",
-      "     :MMMMMMMM MMMMMMMMMMMMM:MMMMMM MMMMMMMM:     ",
-      "     :MM\"\":\"\" MMMMMMMMMMMMM:MMMMMM \"\": \"'MM:     ",
-      "      MM:   :  MMMMMMMMMMMMM:MMMMMM  ,'  :MM      ",
-      "      'MM   :  :MMMMMMMMMMMM:MMMMM:  :   ;M:      ",
-      "       :M;  :  'MMMMMMMMMMMMMMMMMM'  :  ;MM       ",
-      "       :MM. :   :MMMMMMMMMM;MMMMM:   :  MM:       ",
-      "        :M: :    MMMMMMMMM'MMMMMM'   : :MM'       ",
-      "        'MM :    \"MMMMMMM:;MMMMM\"   ,' ;M\"        ",
-      "         'M  :    \"\"\"\":;;;\"\"\"\"    :  M:         ",
-      "         ;'  :     \"MMMMMMMM;."     :  \"\".        ",
-      "       ,;    :      :MMMMMMM:;.     :    '.       ",
-      "      :'     :    ,MM''\"\"\"\"':M:    :     ';      ",
-      "     ;'      :    ;M'         MM.   :       ;.    ",
-      "   ,'        :    \"            \"'   :        '.   ",
-      "   '        :'                       '        ''  ",
-      " .          :                        '          ' ",
-      "'          ;                          ;          '"
-    ]);
-    await new Promise((r) => setTimeout(r, 500));
-    await printLines([
-      "> ACCESS PHRASE ACCEPTED.",
-      "> UNLOCKING NODE...",
-      `> PASSCODE: ${passcode}\n`,
-      `> "I'm impressed. We could use a hacker like you in our ranks.`,
-      `> Seek me out for a reward.`,
-      `> I'm D-Bug with the R@t BOIZ."`,
-      `> \n> Bring this password to D-Bug to complete your mission.`
-    ]);
+    await printLine("> ACCESS PHRASE ACCEPTED.");
+    await printLine("> UNLOCKING NODE...");
+    await printLine("> PASSCODE: SW4RM-B1T3-V4\n");
+    await printLine("> \"I'm impressed. We could use a hacker like you in our ranks.");
+    await printLine("> Seek me out for a reward.");
+    await printLine("> I'm D-Bug with the R@t BOIZ.\"\n");
+    await printLine("> Bring this password to D-Bug to complete your mission.");
     document.body.classList.remove("flash-yellow");
   } else {
     terminal.classList.add("glitch");
     document.body.classList.add("flash-red");
-    await printLines([
-      `> ${value}`,
-      "> ERROR: INVALID STRING.",
-      "> INTRUSION COUNTERMEASURE ACTIVATED.",
-      "> RESETTING TERMINAL..."
-    ]);
-    await new Promise((r) => setTimeout(r, 500));
-    await printLines([
-      "\n\n\n\n",
-      "> SYSTEM CORE REBOOTING...",
-      "> PURGING MEMORY CACHE...",
-      "> RESTORING DEFAULT PROMPT...\n"
-    ]);
-    const fade = document.createElement("div");
-    fade.className = "fade-black";
-    document.body.appendChild(fade);
-    terminal.classList.remove("glitch");
-    document.body.classList.remove("flash-red");
-    await new Promise((r) => setTimeout(r, 2000));
-    location.reload();
+    await printLine("> ERROR: INVALID STRING.");
+    await printLine("> INTRUSION COUNTERMEASURE ACTIVATED.");
+    await printLine("> RESETTING TERMINAL...");
+    setTimeout(() => location.reload(), 2000);
   }
 };
 
