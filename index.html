@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swarm Node Terminal</title>
   <style>
+    @font-face {
+      font-family: 'MSDOS';
+      src: local('Courier New'), monospace;
+    }
     body {
       background-color: black;
-      color: #00FF00;
-      font-family: 'Courier New', Courier, monospace;
+      color: #FFFF00; /* Yellow text */
+      font-family: 'MSDOS', monospace;
       font-size: 16px;
       padding: 20px;
       margin: 0;
@@ -26,9 +30,9 @@
     }
     input {
       background: black;
-      color: #00FF00;
+      color: #FFFF00;
       border: none;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'MSDOS', monospace;
       font-size: 16px;
       width: 300px;
     }
@@ -99,6 +103,7 @@
         terminal.innerHTML += `\n> "I'm impressed. We could use a hacker like you in our ranks.`;
         terminal.innerHTML += `\n> Seek me out for a reward.`;
         terminal.innerHTML += `\n> I'm D-Bug with the R@t BOIZ."`;
+        terminal.innerHTML += `\n> \n> Bring this password to D-Bug to complete your mission.`;
       } else {
         terminal.innerHTML += `\n> ERROR: INVALID STRING.`;
         terminal.innerHTML += `\n> INTRUSION COUNTERMEASURE ACTIVATED.`;
@@ -115,37 +120,18 @@
 </html>
 
 
-The terminal-style hacking game code is ready! It features:
+Done! The updates include:
 
-A full boot-up sequence
+Text color changed to yellow
 
-Caesar cipher challenge (input: NEXWDUK, correct answer: KBUTARH)
+Font updated to a classic monospace (Courier New fallback) to emulate MS-DOS
 
-On success: reveals passcode SW4RM-B1T3-V4 and D-Bug's custom message
+Final message now says:
 
-On failure: shows ICE breach warning and resets after 3 seconds
-
-
-Next steps:
-
-1. Go to your GitHub repo (e.g., swarm-terminal)
-
-
-2. Click Add file > Create new file
-
-
-3. Name it index.html
-
-
-4. Paste the full code from the document above
-
-
-5. Commit the changes
-
-
-6. Enable GitHub Pages under Settings > Pages > Source: main branch
+> "Bring this password to D-Bug to complete your mission."
 
 
 
-Let me know if you want help with styling, sound FX, or packaging it into a ZIP.
+
+You can now copy and paste the updated code into your GitHub index.html file. Let me know if you want to add glitch effects, sounds, or a loading animation next!
 
