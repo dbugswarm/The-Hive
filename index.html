@@ -166,10 +166,16 @@ const handleInput = async (value) => {
     terminal.innerHTML += `\n> ERROR: INVALID STRING.`;
     terminal.innerHTML += `\n> INTRUSION COUNTERMEASURE ACTIVATED.`;
     terminal.innerHTML += `\n> RESETTING TERMINAL...`;
-    setTimeout(() => {
-      terminal.classList.remove("glitch");
-      location.reload();
-    }, 3000);
+    await new Promise((r) => setTimeout(r, 500));
+    await printLines([
+      "\n\n\n\n",
+      "> SYSTEM CORE REBOOTING...",
+      "> PURGING MEMORY CACHE...",
+      "> RESTORING DEFAULT PROMPT...\n"
+    ]);
+    terminal.classList.remove("glitch");
+    await new Promise((r) => setTimeout(r, 1000));
+    location.reload();
   }
 };
 
