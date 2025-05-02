@@ -39,7 +39,7 @@
       font-size: 16px;
       width: 300px;
     }
-    /* Bold CRT Scanlines + Glow + Flicker */
+    /* Bolder CRT Scanlines + Glow + Flicker */
     body::before {
       content: "";
       position: absolute;
@@ -51,9 +51,9 @@
       background: repeating-linear-gradient(
         to bottom,
         rgba(255, 255, 0, 0.2),
-        rgba(255, 255, 0, 0.2) 3px,
-        transparent 3px,
-        transparent 6px
+        rgba(255, 255, 0, 0.2) 6px,
+        transparent 6px,
+        transparent 12px
       );
       animation: flicker 1.5s infinite;
       pointer-events: none;
