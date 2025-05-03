@@ -62,6 +62,7 @@
       text-align: center;
       margin: 20px 0;
       animation: pulseGlow 2s infinite ease-in-out;
+      white-space: pre;
     }
     input {
       background: black;
@@ -207,7 +208,7 @@ const handleInput = async (value) => {
     document.body.classList.add("flash-yellow");
     const roach = document.createElement("div");
     roach.className = "ascii-art";
-    roach.innerText = `     *\n   *-|-*\n   ..*..\n *\"*****\"*\n  \" \"\"\"\"\"\" \"\n \*********/\n  (((((0)))))`;
+    roach.innerText = `           ,  .'''''.  ...    ''''',  .'          \n            ','     ,.MMMM;.;'      '.            \n             ;;    ;MMMMMMMMM;     ;;'            \n            :'M:  ;MMMMMMMMMMM;.  :M':            \n            : M:  MMMMMMMMMMMMM:  :M  .           \n           .' M:  MMMMMMMMMMMMM:  :M. ;           \n           ; :M'  :MMMMMMMMMMMM'  'M: :           \n           : :M: .;\"MMMMMMMMM\":;. ,M: :           \n           :  ::,MMM;.M\":::M.;MMM ::' :           \n         ,.;    ;MMMMMM;:MMMMMMMM:    :,.         \n         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM         \n         M:''':MMMMMMMMM;MMMMMMMM: \"': M         \n         M.:   ;MMMMMMMMMMMMMMMMMM;   : M         \n         :::   MMMMMMMMMMM;MMMMMMMM   ::M         \n        ,'';   MMMMMMMMMMMM:MMMMMMM   :'".        \n      ,'   :   MMMMMMMMMMMM:MMMMMMM   :   '.      \n     '     :  'MMMMMMMMMMMMM:MMMMMM   ;     '     \n     ,.....;.. MMMMMMMMMMMMM:MMMMMM ..:....;.     \n     :MMMMMMMM MMMMMMMMMMMMM:MMMMMM MMMMMMMM:     \n     :MM\"\"\":\"\" MMMMMMMMMMMMM:MMMMMM \"\": "'MM:     \n      MM:   :  MMMMMMMMMMMMM:MMMMMM  ,'  :MM      \n      'MM   :  :MMMMMMMMMMMM:MMMMM:  :   ;M:      \n       :M;  :  'MMMMMMMMMMMMMMMMMM'  :  ;MM       \n       :MM. :   :MMMMMMMMMM;MMMMM:   :  MM:       \n        :M: :    MMMMMMMMM'MMMMMM'   : :MM'       \n        'MM :    \"MMMMMMM:;MMMMM\"   ,' ;M"        \n         'M  :    \"\"\"\":;;;\"\"\"\"\"    :  M:         \n         ;'  :     \"MMMMMMMM;.\"     :  \"".        \n       ,;    :      :MMMMMMM:;.     :    '.       \n      :'     :    ,MM''\"\"\"\"'':M:    :     ';      \n     ;'      :    ;M'         MM.   :       ;.    \n   ,'        :    \"            \"'   :        '.   \n   '        :'                       '        ''  \n .          :                        '          ' \n'          ;                          ;          '`;
     terminal.appendChild(roach);
     await printLine("> ACCESS PHRASE ACCEPTED.");
     await printLine("> UNLOCKING NODE...");
