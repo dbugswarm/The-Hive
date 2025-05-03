@@ -13,13 +13,55 @@
       margin: 0;
       position: relative;
       overflow: hidden;
+      animation: introPulse 1s ease-out;
+    }
+    @keyframes introPulse {
+      0% { transform: scale(0.98); opacity: 0.7; }
+      50% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); }
     }
     #terminal {
       white-space: pre-wrap;
       overflow-y: auto;
       height: 100vh;
       position: relative;
+      z-index: 2;
+    }
+    #logo {
+      font-weight: bold;
+      color: #FFFF00;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { text-shadow: 0 0 5px #FFFF00; }
+      50% { text-shadow: 0 0 15px #FFFF00; }
+    }
+    #noise {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,0,0.03) 1px,
+        transparent 2px
+      );
+      animation: staticNoise 0.2s steps(2, end) infinite;
+    }
+    @keyframes staticNoise {
+      0% { opacity: 0.1; transform: translate(0, 0); }
+      50% { opacity: 0.2; transform: translate(-1px, 1px); }
+      100% { opacity: 0.1; transform: translate(1px, -1px); }
+    }
+    .ascii-art {
+      text-align: center;
+      margin: 20px 0;
+      animation: pulseGlow 2s infinite ease-in-out;
     }
     input {
       background: black;
@@ -66,7 +108,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2;
+      z-index: 3;
       background: repeating-linear-gradient(
         to bottom,
         rgba(255, 255, 0, 0.2),
@@ -88,7 +130,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 3;
+      z-index: 4;
       background: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.75) 100%);
       pointer-events: none;
     }
@@ -101,7 +143,10 @@
   <audio id="focus-sound" preload="auto">
     <source src="data:audio/wav;base64,UklGRlAAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRgAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
   </audio>
-  <div id="terminal"></div>
+  <div id="noise"></div>
+  <div id="terminal">
+    <div id="logo">[ D-BUG // NODE_12X ]</div>
+  </div>
   <script>
     const terminal = document.getElementById("terminal");
     const beep = document.getElementById("beep-sound");
@@ -160,6 +205,10 @@ const handleInput = async (value) => {
   terminal.innerHTML += `\n> ${value}`;
   if (value === "BUGBRAIN") {
     document.body.classList.add("flash-yellow");
+    const roach = document.createElement("div");
+    roach.className = "ascii-art";
+    roach.innerText = `     *\n   *-|-*\n   ..*..\n *\"*****\"*\n  \" \"\"\"\"\"\" \"\n \*********/\n  (((((0)))))`;
+    terminal.appendChild(roach);
     await printLine("> ACCESS PHRASE ACCEPTED.");
     await printLine("> UNLOCKING NODE...");
     await printLine("> PASSCODE: SW4RM-B1T3-V4\n");
