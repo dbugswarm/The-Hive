@@ -58,11 +58,31 @@
       50% { opacity: 0.2; transform: translate(-1px, 1px); }
       100% { opacity: 0.1; transform: translate(1px, -1px); }
     }
-    .ascii-art {
+    .ascii-flash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: yellow;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
       text-align: center;
-      margin: 20px 0;
-      animation: pulseGlow 2s infinite ease-in-out;
+      z-index: 10;
       white-space: pre;
+      animation: flashSequence 1.5s ease-out forwards;
+    }
+    @keyframes flashSequence {
+      0%   { opacity: 1; }
+      20%  { opacity: 0; }
+      40%  { opacity: 1; }
+      60%  { opacity: 0; }
+      85%  { opacity: 1; }
+      100% { opacity: 0; display: none; }
     }
     input {
       background: black;
@@ -178,6 +198,14 @@ const printLine = (text = "", delay = 50) => {
   });
 };
 
+const showRoachFlash = () => {
+  const overlay = document.createElement("div");
+  overlay.className = "ascii-flash";
+  overlay.innerText = `           ,  .'''''.  ...    ''''',  .'          \n            ','     ,.MMMM;.;'      '.            \n             ;;    ;MMMMMMMMM;     ;;'            \n            :'M:  ;MMMMMMMMMMM;.  :M':            \n            : M:  MMMMMMMMMMMMM:  :M  .           \n           .' M:  MMMMMMMMMMMMM:  :M. ;           \n           ; :M'  :MMMMMMMMMMMM'  'M: :           \n           : :M: .;\"MMMMMMMMM\":;. ,M: :           \n           :  ::,MMM;.M\":::M.;MMM ::' :           \n         ,.;    ;MMMMMM;:MMMMMMMM:    :,.         \n         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM         \n         M:''':MMMMMMMMM;MMMMMMMM: \"': M         \n         M.:   ;MMMMMMMMMMMMMMMMMM;   : M         \n         :::   MMMMMMMMMMM;MMMMMMMM   ::M         \n        ,'';   MMMMMMMMMMMM:MMMMMMM   :'".        \n      ,'   :   MMMMMMMMMMMM:MMMMMMM   :   '.      \n     '     :  'MMMMMMMMMMMMM:MMMMMM   ;     '     \n     ,.....;.. MMMMMMMMMMMMM:MMMMMM ..:....;.     \n     :MMMMMMMM MMMMMMMMMMMMM:MMMMMM MMMMMMMM:     \n     :MM\"\"\":\"\" MMMMMMMMMMMMM:MMMMMM \"\": "'MM:     \n      MM:   :  MMMMMMMMMMMMM:MMMMMM  ,'  :MM      \n      'MM   :  :MMMMMMMMMMMM:MMMMM:  :   ;M:      \n       :M;  :  'MMMMMMMMMMMMMMMMMM'  :  ;MM       \n       :MM. :   :MMMMMMMMMM;MMMMM:   :  MM:       \n        :M: :    MMMMMMMMM'MMMMMM'   : :MM'       \n        'MM :    \"MMMMMMM:;MMMMM\"   ,' ;M"        \n         'M  :    \"\"\"\":;;;\"\"\"\"\"    :  M:         \n         ;'  :     \"MMMMMMMM;.\"     :  \"".        \n       ,;    :      :MMMMMMM:;.     :    '.       \n      :'     :    ,MM''\"\"\"\"'':M:    :     ';      \n     ;'      :    ;M'         MM.   :       ;.    \n   ,'        :    \"            \"'   :        '.   \n   '        :'                       '        ''  \n .          :                        '          ' \n'          ;                          ;          '`;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 1800);
+};
+
 const bootSequence = async () => {
   await printLine("> INITIATING CONNECTION...");
   await printLine("> ACCESSING LOCAL NODE: SWARM-RUNNER_12X");
@@ -205,11 +233,9 @@ const bootSequence = async () => {
 const handleInput = async (value) => {
   terminal.innerHTML += `\n> ${value}`;
   if (value === "BUGBRAIN") {
+    showRoachFlash();
+    await new Promise(resolve => setTimeout(resolve, 2000));
     document.body.classList.add("flash-yellow");
-    const roach = document.createElement("div");
-    roach.className = "ascii-art";
-    roach.innerText = `           ,  .'''''.  ...    ''''',  .'          \n            ','     ,.MMMM;.;'      '.            \n             ;;    ;MMMMMMMMM;     ;;'            \n            :'M:  ;MMMMMMMMMMM;.  :M':            \n            : M:  MMMMMMMMMMMMM:  :M  .           \n           .' M:  MMMMMMMMMMMMM:  :M. ;           \n           ; :M'  :MMMMMMMMMMMM'  'M: :           \n           : :M: .;\"MMMMMMMMM\":;. ,M: :           \n           :  ::,MMM;.M\":::M.;MMM ::' :           \n         ,.;    ;MMMMMM;:MMMMMMMM:    :,.         \n         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM         \n         M:''':MMMMMMMMM;MMMMMMMM: \"': M         \n         M.:   ;MMMMMMMMMMMMMMMMMM;   : M         \n         :::   MMMMMMMMMMM;MMMMMMMM   ::M         \n        ,'';   MMMMMMMMMMMM:MMMMMMM   :'".        \n      ,'   :   MMMMMMMMMMMM:MMMMMMM   :   '.      \n     '     :  'MMMMMMMMMMMMM:MMMMMM   ;     '     \n     ,.....;.. MMMMMMMMMMMMM:MMMMMM ..:....;.     \n     :MMMMMMMM MMMMMMMMMMMMM:MMMMMM MMMMMMMM:     \n     :MM\"\"\":\"\" MMMMMMMMMMMMM:MMMMMM \"\": "'MM:     \n      MM:   :  MMMMMMMMMMMMM:MMMMMM  ,'  :MM      \n      'MM   :  :MMMMMMMMMMMM:MMMMM:  :   ;M:      \n       :M;  :  'MMMMMMMMMMMMMMMMMM'  :  ;MM       \n       :MM. :   :MMMMMMMMMM;MMMMM:   :  MM:       \n        :M: :    MMMMMMMMM'MMMMMM'   : :MM'       \n        'MM :    \"MMMMMMM:;MMMMM\"   ,' ;M"        \n         'M  :    \"\"\"\":;;;\"\"\"\"\"    :  M:         \n         ;'  :     \"MMMMMMMM;.\"     :  \"".        \n       ,;    :      :MMMMMMM:;.     :    '.       \n      :'     :    ,MM''\"\"\"\"'':M:    :     ';      \n     ;'      :    ;M'         MM.   :       ;.    \n   ,'        :    \"            \"'   :        '.   \n   '        :'                       '        ''  \n .          :                        '          ' \n'          ;                          ;          '`;
-    terminal.appendChild(roach);
     await printLine("> ACCESS PHRASE ACCEPTED.");
     await printLine("> UNLOCKING NODE...");
     await printLine("> PASSCODE: SW4RM-B1T3-V4\n");
