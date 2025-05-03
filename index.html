@@ -48,8 +48,8 @@
       pointer-events: none;
       background: repeating-linear-gradient(
         0deg,
-        rgba(255,255,0,0.03) 1px,
-        transparent 2px
+        rgba(255,255,0,0.03) 0.5px,
+        transparent 1px
       );
       animation: staticNoise 0.2s steps(2, end) infinite;
     }
@@ -83,6 +83,15 @@
       60%  { opacity: 0; }
       85%  { opacity: 1; }
       100% { opacity: 0; display: none; }
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 11;
     }
     input {
       background: black;
@@ -133,9 +142,9 @@
       background: repeating-linear-gradient(
         to bottom,
         rgba(255, 255, 0, 0.2),
-        rgba(255, 255, 0, 0.2) 4px,
-        transparent 4px,
-        transparent 8px
+        rgba(255, 255, 0, 0.2) 2px,
+        transparent 2px,
+        transparent 4px
       );
       animation: flicker 1.5s infinite;
       pointer-events: none;
@@ -158,6 +167,7 @@
   </style>
 </head>
 <body>
+  <canvas id="fireworks"></canvas>
   <audio id="beep-sound" preload="auto">
     <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
   </audio>
@@ -169,92 +179,60 @@
     <div id="logo">[ D-BUG // NODE_12X ]</div>
   </div>
   <script>
-    const terminal = document.getElementById("terminal");
-    const beep = document.getElementById("beep-sound");
-    const focusSound = document.getElementById("focus-sound");const playBeep = () => {
-  const sound = beep.cloneNode();
-  sound.play().catch(() => {});
-};
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particles = [];function Particle(x, y, dx, dy, color) {
+  this.x = x;
+  this.y = y;
+  this.dx = dx;
+  this.dy = dy;
+  this.color = color;
+  this.alpha = 1;
 
-const playFocusSound = () => {
-  const fx = focusSound.cloneNode();
-  fx.play().catch(() => {});
-};
+  this.update = function () {
+    this.x += this.dx;
+    this.y += this.dy;
+    this.alpha -= 0.02;
+  };
 
-const printLine = (text = "", delay = 50) => {
-  return new Promise((resolve) => {
-    const line = document.createElement("div");
-    terminal.appendChild(line);
-    let i = 0;
-    const interval = setInterval(() => {
-      line.textContent += text[i];
-      if (text[i] && text[i] !== " ") playBeep();
-      i++;
-      if (i >= text.length) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, delay);
-  });
-};
+  this.draw = function () {
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, 2, 2);
+    ctx.globalAlpha = 1;
+  };
+}
 
-const showRoachFlash = () => {
-  const overlay = document.createElement("div");
-  overlay.className = "ascii-flash";
-  overlay.innerText = `           ,  .'''''.  ...    ''''',  .'          \n            ','     ,.MMMM;.;'      '.            \n             ;;    ;MMMMMMMMM;     ;;'            \n            :'M:  ;MMMMMMMMMMM;.  :M':            \n            : M:  MMMMMMMMMMMMM:  :M  .           \n           .' M:  MMMMMMMMMMMMM:  :M. ;           \n           ; :M'  :MMMMMMMMMMMM'  'M: :           \n           : :M: .;\"MMMMMMMMM\":;. ,M: :           \n           :  ::,MMM;.M\":::M.;MMM ::' :           \n         ,.;    ;MMMMMM;:MMMMMMMM:    :,.         \n         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM         \n         M:''':MMMMMMMMM;MMMMMMMM: \"': M         \n         M.:   ;MMMMMMMMMMMMMMMMMM;   : M         \n         :::   MMMMMMMMMMM;MMMMMMMM   ::M         \n        ,'';   MMMMMMMMMMMM:MMMMMMM   :'".        \n      ,'   :   MMMMMMMMMMMM:MMMMMMM   :   '.      \n     '     :  'MMMMMMMMMMMMM:MMMMMM   ;     '     \n     ,.....;.. MMMMMMMMMMMMM:MMMMMM ..:....;.     \n     :MMMMMMMM MMMMMMMMMMMMM:MMMMMM MMMMMMMM:     \n     :MM\"\"\":\"\" MMMMMMMMMMMMM:MMMMMM \"\": "'MM:     \n      MM:   :  MMMMMMMMMMMMM:MMMMMM  ,'  :MM      \n      'MM   :  :MMMMMMMMMMMM:MMMMM:  :   ;M:      \n       :M;  :  'MMMMMMMMMMMMMMMMMM'  :  ;MM       \n       :MM. :   :MMMMMMMMMM;MMMMM:   :  MM:       \n        :M: :    MMMMMMMMM'MMMMMM'   : :MM'       \n        'MM :    \"MMMMMMM:;MMMMM\"   ,' ;M"        \n         'M  :    \"\"\"\":;;;\"\"\"\"\"    :  M:         \n         ;'  :     \"MMMMMMMM;.\"     :  \"".        \n       ,;    :      :MMMMMMM:;.     :    '.       \n      :'     :    ,MM''\"\"\"\"'':M:    :     ';      \n     ;'      :    ;M'         MM.   :       ;.    \n   ,'        :    \"            \"'   :        '.   \n   '        :'                       '        ''  \n .          :                        '          ' \n'          ;                          ;          '`;
-  document.body.appendChild(overlay);
-  setTimeout(() => overlay.remove(), 1800);
-};
-
-const bootSequence = async () => {
-  await printLine("> INITIATING CONNECTION...");
-  await printLine("> ACCESSING LOCAL NODE: SWARM-RUNNER_12X");
-  await printLine("> RUNNING DECRYPT ROUTINE...");
-  await printLine("> ICE TRIPWIRE ENGAGED.");
-  await printLine("> CIPHER MODULE ONLINE.\n");
-  await printLine("> CIPHER CHALLENGE: EXJEUDLQ");
-  await printLine("> (USE CLUE FROM NFC DEVICE TO DECRYPT)\n");
-  await printLine("> INPUT DECRYPTED STRING:");
-
-  const input = document.createElement("input");
-  input.setAttribute("autocomplete", "off");
-  input.setAttribute("placeholder", "█");
-  input.addEventListener("focus", playFocusSound);
-  input.focus();
-  terminal.appendChild(input);
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      handleInput(input.value.trim().toUpperCase());
-    }
-  });
-};
-
-const handleInput = async (value) => {
-  terminal.innerHTML += `\n> ${value}`;
-  if (value === "BUGBRAIN") {
-    showRoachFlash();
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    document.body.classList.add("flash-yellow");
-    await printLine("> ACCESS PHRASE ACCEPTED.");
-    await printLine("> UNLOCKING NODE...");
-    await printLine("> PASSCODE: SW4RM-B1T3-V4\n");
-    await printLine("> \"I'm impressed. We could use a hacker like you in our ranks.");
-    await printLine("> Seek me out for a reward.");
-    await printLine("> I'm D-Bug with the R@t BOIZ.\"\n");
-    await printLine("> Bring this password to D-Bug to complete your mission.");
-    document.body.classList.remove("flash-yellow");
-  } else {
-    terminal.classList.add("glitch");
-    document.body.classList.add("flash-red");
-    await printLine("> ERROR: INVALID STRING.");
-    await printLine("> INTRUSION COUNTERMEASURE ACTIVATED.");
-    await printLine("> RESETTING TERMINAL...");
-    setTimeout(() => location.reload(), 2000);
+function createExplosion(x, y) {
+  const colors = ["#ffff00", "#ff6600", "#00ffcc"];
+  for (let i = 0; i < 30; i++) {
+    const dx = (Math.random() - 0.5) * 4;
+    const dy = (Math.random() - 0.5) * 4;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    particles.push(new Particle(x, y, dx, dy, color));
   }
-};
+}
 
-bootSequence();
+function animateFireworks() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach((p, i) => {
+    p.update();
+    p.draw();
+    if (p.alpha <= 0) particles.splice(i, 1);
+  });
+  if (particles.length > 0) requestAnimationFrame(animateFireworks);
+}
+
+function launchFireworks() {
+  for (let i = 0; i < 5; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height * 0.5;
+    createExplosion(x, y);
+  }
+  animateFireworks();
+}
 
   </script>
 </body>
