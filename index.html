@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -104,7 +103,6 @@
 <body>
 <canvas id="fireworks"></canvas>
 <div id="terminal"><div id="logo">[ D-BUG // NODE_12X ]</div></div>
-
 <script>
 const terminal = document.getElementById("terminal");
 const canvas = document.getElementById("fireworks");
@@ -112,182 +110,69 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let inputField;
-let particles = [];
+let particles = [];function printLine(text = "", delay = 35) { return new Promise((resolve) => { const line = document.createElement("div"); terminal.appendChild(line); let i = 0; const interval = setInterval(() => { line.textContent += text[i]; i++; if (i >= text.length) { clearInterval(interval); resolve(); } }, delay); }); }
 
-function printLine(text = "", delay = 35) {
-  return new Promise((resolve) => {
-    const line = document.createElement("div");
-    terminal.appendChild(line);
-    let i = 0;
-    const interval = setInterval(() => {
-      line.textContent += text[i];
-      i++;
-      if (i >= text.length) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, delay);
-  });
-}
+function resetToFilePhase() { terminal.innerHTML = '<div id="logo">[ D-BUG // NODE_12X ]</div>'; runFilePhase(); }
 
-function showRoachFlash() {
-  const flash = document.createElement('div');
-  flash.className = 'ascii-flash';
-  flash.innerText = `           ,  .'''''.  ...    ''''',  .'
-            ','     ,.MMMM;.;'      '.
-             ;;    ;MMMMMMMMM;     ;;'
-            :'M:  ;MMMMMMMMMMM;.  :M':
-            : M:  MMMMMMMMMMMMM:  :M  .
-           .' M:  MMMMMMMMMMMMM:  :M. ;
-           ; :M'  :MMMMMMMMMMMM'  'M: :
-           : :M: .;"MMMMMMMMM":;. ,M: :
-           :  ::,MMM;.M":::M.;MMM ::' :
-         ,.;    ;MMMMMM;:MMMMMMMM:    :,.
-         MMM.;.,MMMMMMMM;MMMMMMMM;.,;.MMM
-         M:''':MMMMMMMMM;MMMMMMMM: "': M
-         M.:   ;MMMMMMMMMMMMMMMMMM;   : M
-         :::   MMMMMMMMMMM;MMMMMMMM   ::M
-        ,'';   MMMMMMMMMMMM:MMMMMMM   :'"`;
-  document.body.appendChild(flash);
-  setTimeout(() => flash.remove(), 1500);
-}
+async function runCipherPhase() { await printLine("> Initializing uplink..."); await printLine("> Connection established."); await printLine("> Handshake received from NODE_12X."); await printLine("> Launching secure prompt..."); await printLine("> Decryption required to access node."); await printLine("> Cipher key embedded in your NFC chip."); await printLine("> Enter the decoded password to proceed:\n");
 
-function createExplosion(x, y) {
-  const colors = ["#ffff00", "#ff6600", "#00ffcc"];
-  for (let i = 0; i < 30; i++) {
-    const dx = (Math.random() - 0.5) * 4;
-    const dy = (Math.random() - 0.5) * 4;
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    particles.push({ x, y, dx, dy, alpha: 1, color });
-  }
-}
+const input = document.createElement("input"); terminal.appendChild(input); input.focus();
 
-function animateFireworks() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach((p, i) => {
-    p.x += p.dx;
-    p.y += p.dy;
-    p.alpha -= 0.02;
-    ctx.globalAlpha = p.alpha;
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, 2, 2);
-    if (p.alpha <= 0) particles.splice(i, 1);
-  });
-  requestAnimationFrame(animateFireworks);
-}
+input.addEventListener("keydown", async (e) => { if (e.key === "Enter") { const cmd = input.value.trim().toUpperCase(); input.disabled = true; if (cmd === "BUGBRAIN") { await printLine("> PASSWORD ACCEPTED.\n"); runFilePhase(); } else { await printLine("> ACCESS DENIED."); input.disabled = false; input.value = ""; input.focus(); } } }); }
 
-function launchFireworks() {
-  for (let i = 0; i < 5; i++) {
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height * 0.5;
-    createExplosion(x, y);
-  }
-}
+async function runFilePhase() { await printLine("█ D-BUG HERE."); await printLine("█ One of these files hides my payload."); await printLine("█ Use:     CAT [filename]     to examine files"); await printLine("█ Then:    EXTRACT [filename] to recover the target"); await printLine("█ You only get one shot. No do-overs.\n"); await printLine("/NODE/SWARM-RUNNER_12X/");
 
-function resetToFilePhase() {
-  terminal.innerHTML = '<div id="logo">[ D-BUG // NODE_12X ]</div>';
-  runFilePhase();
-}
+const files = [ "bugscan_322.tmp", "corememo.log", "debugdump.txt", "malware_march.mp3", "system_flags.ini", "trashnote_01.txt" ]; for (let f of files) { await printLine("- " + f); } await printLine("\n> Type your command:"); inputField = document.createElement("input"); terminal.appendChild(inputField); inputField.focus();
 
-async function runCipherPhase() {
-  await printLine("> Initializing uplink...");
-  await printLine("> Connection established.");
-  await printLine("> Handshake received from NODE_12X.");
-  await printLine("> Launching secure prompt...");
-  await printLine("> Decrypt required to access node. Caesar Cipher [+3]");
-  await printLine("> Encrypted word: EXJEURLQ");
-  await printLine("> Type the decrypted password to proceed:\n");
+inputField.addEventListener("keydown", async (e) => { if (e.key === "Enter") { const cmd = inputField.value.trim(); const lowerCmd = cmd.toLowerCase(); inputField.disabled = true;
 
-  const input = document.createElement("input");
-  terminal.appendChild(input);
-  input.focus();
-
-  input.addEventListener("keydown", async (e) => {
-    if (e.key === "Enter") {
-      const cmd = input.value.trim().toUpperCase();
-      input.disabled = true;
-      if (cmd === "BUGBRAIN") {
-        await printLine("> PASSWORD ACCEPTED.\n");
-        runFilePhase();
-      } else {
-        await printLine("> ACCESS DENIED.");
-        input.disabled = false;
-        input.value = "";
-        input.focus();
-      }
+if (lowerCmd.startsWith("cat ")) {
+    const target = cmd.split(" ")[1];
+    if (target.toLowerCase() === "corememo.log") {
+      await printLine("...NODE INDEX REPORT...");
+      await printLine("> SYS_PURGE FLAGGED");
+      await printLine("> PAYLOAD CACHE LOCATED");
+      await printLine("> ref: ./temp/redlist/_vault.key");
+      await printLine(">> TRACE END <<");
+    } else {
+      await printLine("> No data found.");
     }
-  });
-}
-
-async function runFilePhase() {
-  await printLine("█ D-BUG HERE.");
-  await printLine("█ One of these files hides my payload.");
-  await printLine("█ Use:     CAT [filename]     to examine files");
-  await printLine("█ Then:    EXTRACT [filename] to recover the target");
-  await printLine("█ You only get one shot. No do-overs.\n");
-  await printLine("/NODE/SWARM-RUNNER_12X/");
-
-  const files = [
-    "corememo.log",
-    "debugdump.txt",
-    "bugscan_322.tmp",
-    "system_flags.ini",
-    "trashnote_01.txt",
-    "malware_march.mp3"
-  ];
-  for (let f of files) {
-    await printLine("- " + f);
+  } else if (lowerCmd.startsWith("extract ")) {
+    const file = cmd.split(" ")[1];
+    if (file === "_vault.key") {
+      showRoachFlash();
+      setInterval(launchFireworks, 1000);
+      animateFireworks();
+      await printLine("\n> EXTRACTING...");
+      await printLine("> PAYLOAD CONFIRMED.");
+      await printLine("> MISSION COMPLETE.");
+      await printLine("> I'M IMPRESSED. WE COULD USE A HACKER LIKE YOU.");
+      await printLine("> TELL D-BUG: OPERATION SWARMDIVE");
+      await printLine("> D-BUG OUT.");
+    } else {
+      await printLine("> ACCESS DENIED. TRACE DETECTED. SYSTEM RESTORING...\n");
+      setTimeout(resetToFilePhase, 1500);
+    }
+  } else {
+    await printLine("> UNKNOWN COMMAND.");
   }
-  await printLine("\n> Type your command:");
-  inputField = document.createElement("input");
-  terminal.appendChild(inputField);
+
+  inputField.disabled = false;
+  inputField.value = "";
   inputField.focus();
-
-  inputField.addEventListener("keydown", async (e) => {
-    if (e.key === "Enter") {
-      const cmd = inputField.value.trim();
-      const lowerCmd = cmd.toLowerCase();
-      inputField.disabled = true;
-
-      if (lowerCmd.startsWith("cat ")) {
-        const target = cmd.split(" ")[1];
-        if (target.toLowerCase() === "corememo.log") {
-          await printLine("...NODE INDEX REPORT...");
-          await printLine("> SYS_PURGE FLAGGED");
-          await printLine("> PAYLOAD CACHE LOCATED");
-          await printLine("> ref: ./temp/redlist/_vault.key");
-          await printLine(">> TRACE END <<");
-        } else {
-          await printLine("> No data found.");
-        }
-      } else if (lowerCmd.startsWith("extract ")) {
-        const file = cmd.split(" ")[1];
-        if (file === "_vault.key") {
-          showRoachFlash();
-          setInterval(launchFireworks, 1000);
-          animateFireworks();
-          await printLine("\n> EXTRACTING...");
-          await printLine("> PAYLOAD CONFIRMED.");
-          await printLine("> MISSION COMPLETE.");
-          await printLine("> I'M IMPRESSED. WE COULD USE A HACKER LIKE YOU.");
-          await printLine("> TELL D-BUG: OPERATION SWARMDIVE");
-          await printLine("> D-BUG OUT.");
-        } else {
-          await printLine("> ACCESS DENIED. TRACE DETECTED. SYSTEM RESTORING...\n");
-          setTimeout(resetToFilePhase, 1500);
-        }
-      } else {
-        await printLine("> UNKNOWN COMMAND.");
-      }
-
-      inputField.disabled = false;
-      inputField.value = "";
-      inputField.focus();
-    }
-  });
 }
 
-runCipherPhase();
-</script>
+}); }
+
+function showRoachFlash() { const flash = document.createElement('div'); flash.className = 'ascii-flash'; flash.innerText =              ,--.     .--. /    . ./     /  / / "  /   / _/  {~~v~~}  _  /     {   |   }      ;   /{    |    }/    | _/  {    |    }  _  : |     {    |    }      | |    /{    |    }     | |   / {    |    }     | |  /  {    |    }     | |        |    /  /   | |        |   /  /    | |  /  /     / /   ~~~~~       /; document.body.appendChild(flash); setTimeout(() => flash.remove(), 1500); }
+
+function createExplosion(x, y) { const colors = ["#ffff00", "#ff6600", "#00ffcc"]; for (let i = 0; i < 30; i++) { const dx = (Math.random() - 0.5) * 4; const dy = (Math.random() - 0.5) * 4; const color = colors[Math.floor(Math.random() * colors.length)]; particles.push({ x, y, dx, dy, alpha: 1, color }); } }
+
+function animateFireworks() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach((p, i) => { p.x += p.dx; p.y += p.dy; p.alpha -= 0.02; ctx.globalAlpha = p.alpha; ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, 2, 2); if (p.alpha <= 0) particles.splice(i, 1); }); requestAnimationFrame(animateFireworks); }
+
+function launchFireworks() { for (let i = 0; i < 5; i++) { const x = Math.random() * canvas.width; const y = Math.random() * canvas.height * 0.5; createExplosion(x, y); } }
+
+runCipherPhase(); </script>
+
 </body>
 </html>
